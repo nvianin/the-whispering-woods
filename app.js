@@ -84,6 +84,15 @@ class App {
         this.sun.shadow.mapSize.height = 1024 * 1;
         this.scene = new THREE.Scene();
         this.scene.add(this.sun)
+
+        this.sounds = []
+        for (let i = 0; i < 3; i++) {
+            this.sounds.push(new THREE.Mesh(new THREE.SphereGeometry(.1), new THREE.MeshBasicMaterial({
+                color: 0xff00ff
+            })));
+            this.sounds[i].add(new THREE.PositionalAudio(this.playerController.listener));
+            this.sounds[i].children[0].setBuffer()
+        }
     }
 
     loadResources() {
