@@ -1,4 +1,3 @@
-let log = console.log
 let loader = new THREE.GLTFLoader();
 let glb_to_add = [];
 let app;
@@ -11,6 +10,14 @@ window.addEventListener("load", () => {
         {
             filename: "tree",
             add: false
+        },
+        {
+            filename: "player",
+            add: false
+        },
+        {
+            filename: "terrain_test",
+            add: true
         }
     ]
     let todo = glb_to_load.length;
@@ -40,6 +47,7 @@ window.addEventListener("load", () => {
 class App {
     constructor() {
         this.models = {}
+        this.physics = new Physics();
 
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.shadowMap.enabled = true;
@@ -48,12 +56,19 @@ class App {
         this.camera = this.playerController.camera;
         this.initScene();
         this.loadResources();
-        this.playerController.init(this)
         this.setSize();
         document.body.appendChild(this.renderer.domElement);
         window.addEventListener("mousedown", e => {
             this.renderer.domElement.requestPointerLock()
         })
+        window.addEventListener("resize", this.setSize.bind(this))
+        window.addEventListener("blur", this.pause());
+        window.addEventListener("focus", this.resume())
+
+        this.clock = new THREE.Clock();
+        this.deltaTime = this.clock.getDelta();
+
+        this.playerController.init(this)
 
         this.render()
         log("App loaded.")
@@ -86,6 +101,20 @@ class App {
                         child.receiveShadow = true;
                     })
                 }
+
+                switch (obj.name) {
+                    case "terrain_test":
+                        let b = new CANNON.Body({
+                            shape: this.physics.ObjectToShape(obj.obj[0]),
+                            mass: 0,
+                            position: obj.obj[0].position,
+                        })
+                        this.terrain = b;
+                        this.physics.world.add(b);
+                        break;
+
+                }
+
                 if (obj.add) this.scene.add(o.clone())
                 this.models[obj.name] = o
             })
@@ -94,11 +123,14 @@ class App {
         this.tree = this.models["tree"].clone()
         this.tree.scale.set(.7, .7, .7)
         this.tree.position.y = -4
-        this.scene.add(this.tree);
+        /* this.scene.add(this.tree); */
     }
 
     render() {
         requestAnimationFrame(this.render.bind(this))
+        this.deltaTime = this.clock.getDelta();
+        this.physics.update(this.deltaTime);
+        this.playerController.update()
         this.renderer.render(this.scene, this.camera)
     }
 
@@ -106,5 +138,14 @@ class App {
         this.renderer.setSize(innerWidth, innerHeight);
         this.camera.aspect = innerWidth / innerHeight;
         this.camera.updateProjectionMatrix()
+    }
+
+    pause() {
+        log("App paused.")
+        this.physics.world.pause
+    }
+    resume() {
+        log("App resumed.")
+
     }
 }
