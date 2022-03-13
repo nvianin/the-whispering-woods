@@ -5,6 +5,8 @@ class PlayerController {
         this.camera = new THREE.PerspectiveCamera(90, innerWidth / innerHeight);
         this.camera.position.z = 5;
         this.cameraPivot.add(this.camera);
+        this.listener = new THREE.AudioListener();
+        this.camera.add(this.listener)
         this.movementForce = new THREE.Vector3();
 
         /* physics.world.addConstraint(new CANNON.DistanceConstraint(this.bodies[0], this.bodies[1], this.bodies[0].)) */
