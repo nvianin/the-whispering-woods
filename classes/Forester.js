@@ -1,5 +1,6 @@
 class Forester {
-    constructor(tree_obj, scene) {
+    constructor(tree_obj, app) {
+        this.app
         this.tree_obj = tree_obj;
         this.trees = [];
 

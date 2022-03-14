@@ -50,6 +50,9 @@ class App {
         this.models = {}
         this.physics = new Physics();
 
+        this.socket = io("localhost:42096")
+        this.forester = new Forester(this.models.tree, this)
+
         /* this.audioContext = window.audioContext || webkit */
 
         this.renderer = new THREE.WebGLRenderer();
@@ -72,8 +75,6 @@ class App {
         this.deltaTime = this.clock.getDelta();
 
         this.playerController.init(this)
-
-        this.forester = new Forester(this.models.tree, this)
 
         this.render()
         log("App loaded.")
