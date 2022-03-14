@@ -37,8 +37,8 @@ window.addEventListener("load", () => {
     });
     let loading_interval = setInterval(() => {
         if (todo == 0) {
-            document.app = app = new App()
             clearInterval(loading_interval)
+            document.app = app = new App()
         }
     }, 100)
 })
@@ -48,6 +48,8 @@ class App {
     constructor() {
         this.models = {}
         this.physics = new Physics();
+
+        /* this.audioContext = window.audioContext || webkit */
 
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.shadowMap.enabled = true;
@@ -70,6 +72,11 @@ class App {
 
         this.playerController.init(this)
 
+        this.trees = []
+        for (let i = 0; i < 5; i++) {
+            this.trees.push(new Tree());
+        }
+
         this.render()
         log("App loaded.")
     }
@@ -77,11 +84,15 @@ class App {
     initScene() {
         this.sun = new THREE.DirectionalLight(0xffcc77, 1.5)
         this.sun.position.set(30, 30, 30);
-        this.sun.lookAt(0, 0, 0)
+        this.sun.rotation.set(1.5, 2, 1.5)
         this.sun.castShadow = true;
         this.sun.shadow.bias = -.0001;
         this.sun.shadow.mapSize.width = 1024 * 1;
         this.sun.shadow.mapSize.height = 1024 * 1;
+        this.sun.shadow.camera.top = 10;
+        this.sun.shadow.camera.bottom = -10;
+        this.sun.shadow.camera.left = -10;
+        this.sun.shadow.camera.right = 10;
         this.scene = new THREE.Scene();
         this.scene.add(this.sun)
 
@@ -129,17 +140,13 @@ class App {
             })
         })
         log("App resources loaded.")
-        this.tree = this.models["tree"].clone()
-        this.tree.scale.set(.7, .7, .7)
-        this.tree.position.y = -4
-        /* this.scene.add(this.tree); */
     }
 
     render() {
         requestAnimationFrame(this.render.bind(this))
         this.deltaTime = this.clock.getDelta();
         this.physics.update(this.deltaTime);
-        this.playerController.update()
+        this.playerController.update(this.sun)
         this.renderer.render(this.scene, this.camera)
     }
 

@@ -20,7 +20,7 @@ class Physics {
         let verts = obj.geometry.attributes.position.array;
         let vertices = [];
         let indices = [];
-        let sc = .5;
+        let sc = .75;
         for (let i = 0; i < verts.length; i += 9) {
             vertices.push(verts[i] * sc)
             vertices.push(verts[i + 1] * sc)
