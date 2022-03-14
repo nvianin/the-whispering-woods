@@ -1,6 +1,7 @@
 class Tree {
-    constructor(position) {
-        this.position = position;
-        this.object = new THREE.Mesh(app.models.tree)
+    constructor(position, app) {
+        this.app = app;
+        this.obj = this.app.models.tree.clone();
+        this.obj.position.copy(position);
     }
 }

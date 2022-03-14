@@ -38,6 +38,7 @@ window.addEventListener("load", () => {
     let loading_interval = setInterval(() => {
         if (todo == 0) {
             clearInterval(loading_interval)
+            log("App loading...")
             document.app = app = new App()
         }
     }, 100)
@@ -72,10 +73,7 @@ class App {
 
         this.playerController.init(this)
 
-        this.trees = []
-        for (let i = 0; i < 5; i++) {
-            this.trees.push(new Tree());
-        }
+        this.forester = new Forester(this.models.tree, this)
 
         this.render()
         log("App loaded.")
