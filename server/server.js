@@ -70,8 +70,8 @@ class ForestServer {
     }
 
     load_database() {
-        this.load_users(db.get("users"));
-        this.load_messages(db.get("messages"));
+        /* this.load_users(db.get("users"));
+        this.load_messages(db.get("messages")); */
     }
     load_users(users) {
         for (let key of Object.keys(users)) {
