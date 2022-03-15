@@ -77,14 +77,14 @@ class App {
         this.playerController.init(this)
 
 
-        this.socket = io("http://localhost:42069", {
+        this.socket = io("http://192.168.1.110:42069", {
             withCredentials: false,
             extraHeaders: {
                 "the-whispering-woods": "abcd"
             }
         })
         this.identity = ""
-        this.connect()
+        this.socket.on("connect", this.connect.bind(this))
 
         this.socket.on("id_attribution_reply", id => {
             this.identity = id;
