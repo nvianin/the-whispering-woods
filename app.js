@@ -92,6 +92,9 @@ class App {
             log("Received identity attribution, storing");
             this.socket.emit("login", this.identity);
         })
+        this.socket.on("db", db => {
+            log(db)
+        })
 
         this.render()
         log("App loaded.")
