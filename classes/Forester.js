@@ -1,7 +1,8 @@
 class Forester {
     constructor(tree_obj, app) {
-        this.app
+        this.app = app;
         this.tree_obj = tree_obj;
+        log(this.tree_obj)
         this.trees = [];
 
         for (let i = 0; i < 5; i++) {

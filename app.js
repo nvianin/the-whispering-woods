@@ -50,20 +50,20 @@ class App {
         this.models = {}
         this.physics = new Physics();
 
-        this.socket = io("localhost:42096")
-        this.forester = new Forester(this.models.tree, this)
-
         /* this.audioContext = window.audioContext || webkit */
 
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.body.appendChild(this.renderer.domElement);
         this.playerController = new PlayerController();
         this.camera = this.playerController.camera;
         this.initScene();
         this.loadResources();
         this.setSize();
-        document.body.appendChild(this.renderer.domElement);
+
+        this.forester = new Forester(this.models.tree, this)
+
         window.addEventListener("mousedown", e => {
             this.renderer.domElement.requestPointerLock()
         })
@@ -75,6 +75,23 @@ class App {
         this.deltaTime = this.clock.getDelta();
 
         this.playerController.init(this)
+
+
+        this.socket = io("http://localhost:42069", {
+            withCredentials: false,
+            extraHeaders: {
+                "the-whispering-woods": "abcd"
+            }
+        })
+        this.identity = ""
+        this.connect()
+
+        this.socket.on("id_attribution_reply", id => {
+            this.identity = id;
+            window.localStorage.identity = id;
+            log("Received identity attribution, storing");
+            this.socket.emit("login", this.identity);
+        })
 
         this.render()
         log("App loaded.")
@@ -159,8 +176,32 @@ class App {
         log("App paused.")
         this.physics.world.pause
     }
+
     resume() {
         log("App resumed.")
+    }
 
+    connect() {
+        if (window.localStorage.identity) {
+            log("found identity in local storage")
+            this.identity = window.localStorage.identity;
+            this.socket.emit("login", this.identity);
+        } else {
+            this.socket.emit("id_attribution_request");
+            /* this.socket.await("id_attribution_reply") */
+            log("sent request for identity")
+        }
+    }
+
+    postMessage(msg, position) {
+        try {
+            this.socket.emit("message_write", {
+                message: msg,
+                position: serializeVector(position)
+            })
+        } catch (e) {
+            console.error("MESSAGE FAILED TO BE WRITTEN!!")
+            console.error(e);
+        }
     }
 }
