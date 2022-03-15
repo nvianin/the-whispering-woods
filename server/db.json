@@ -1,1 +1,13 @@
-{}
+{
+    "users": {
+        "93777332-F212-474D-AADB-E610FBC71F3E": {
+            "id": "93777332-F212-474D-AADB-E610FBC71F3E",
+            "writtenMessages": []
+        },
+        "CADD981E-948E-4282-9472-5B2422D935AF": {
+            "id": "CADD981E-948E-4282-9472-5B2422D935AF",
+            "writtenMessages": []
+        }
+    },
+    "messages": {}
+}

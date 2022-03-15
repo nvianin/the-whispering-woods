@@ -14,6 +14,14 @@ class User {
         }
     }
 }
+class Message {
+    constructor() {
+
+    }
+    destroy() {
+
+    }
+}
 module.exports = {
     User
 }
