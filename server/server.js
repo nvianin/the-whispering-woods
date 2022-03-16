@@ -51,12 +51,16 @@ class ForestServer {
                 client.emit("db", db);
             }))
             client.on("disconnect", disconnect => {
-                log("Client " + client.user_id + " disconnected")
-                /* log(this.users) */
-                let u_i = this.online_users.indexOf(client.user)
-                log(this.online_users, u_i)
-                this.online_users[u_i].destroy();
-                this.online_users.splice(u_i, 1)
+                try {
+                    log("Client " + client.user_id + " disconnected")
+                    /* log(this.users) */
+                    let u_i = this.online_users.indexOf(client.user)
+                    log(this.online_users, u_i)
+                    this.online_users[u_i].destroy();
+                    this.online_users.splice(u_i, 1)
+                } catch (e) {
+                    console.error(e)
+                }
             })
             client.on("message_write", msg => {
                 let msg_id = crypto.randomUUID();
