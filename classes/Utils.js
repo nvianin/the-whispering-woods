@@ -12,3 +12,5 @@ const serializeVector = (v) => {
         z: v.z
     }
 }
+
+let raycaster = new THREE.Raycaster();
