@@ -84,15 +84,13 @@ class PlayerController {
         this.initialized = true;
     }
 
-    update(sun) {
+    update() {
         if (!this.initialized) return false;
         /* log(this.bodies[0].position) */
         this.object.position.set(this.bodies[0].position.x, this.bodies[0].position.y, this.bodies[0].position.z);
         if (this.bodies[0].sleepState) this.bodies[0].wakeUp()
         this.bodies[0].applyForce(new CANNON.Vec3(this.movementForce.x, this.movementForce.y, this.movementForce.z), new CANNON.Vec3())
         if (this.bodies[0].position.y < -10) this.bodies[0].position.y = 1;
-        sun.position.x = this.bodies[0].position.x;
-        sun.position.z = this.bodies[0].position.z;
     }
 
     handleMouseMove(e) {

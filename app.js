@@ -165,7 +165,7 @@ class App {
         requestAnimationFrame(this.render.bind(this))
         this.deltaTime = this.clock.getDelta();
         this.physics.update(this.deltaTime);
-        this.playerController.update(this.sun)
+        this.playerController.update()
         this.renderer.render(this.scene, this.camera)
     }
 
