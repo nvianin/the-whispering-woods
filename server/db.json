@@ -1,15 +1,7 @@
 {
     "users": {
-        "38A9C7E2-9665-4F9A-83D9-B7A5D5EBEDC8": {
-            "id": "38A9C7E2-9665-4F9A-83D9-B7A5D5EBEDC8",
-            "writtenMessages": []
-        },
         "93777332-F212-474D-AADB-E610FBC71F3E": {
             "id": "93777332-F212-474D-AADB-E610FBC71F3E",
-            "writtenMessages": []
-        },
-        "CADD981E-948E-4282-9472-5B2422D935AF": {
-            "id": "CADD981E-948E-4282-9472-5B2422D935AF",
             "writtenMessages": []
         }
     },

@@ -1,6 +1,8 @@
 let loader = new THREE.GLTFLoader();
 let glb_to_add = [];
 let app;
+let server = "localhost",
+    port = "42069"
 
 window.addEventListener("load", () => {
     let glb_to_load = [{
@@ -77,7 +79,7 @@ class App {
         this.playerController.init(this)
 
 
-        this.socket = io("http://192.168.1.110:42069", {
+        this.socket = io("http://" + server + ":" + port, {
             withCredentials: false,
             extraHeaders: {
                 "the-whispering-woods": "abcd"
@@ -115,6 +117,9 @@ class App {
         this.scene = new THREE.Scene();
         this.scene.add(this.sun)
 
+        this.ambient = new THREE.AmbientLight(0x88aaff, 1)
+        this.scene.add(this.ambient)
+
         this.sounds = []
         for (let i = 0; i < 3; i++) {
             this.sounds.push(new THREE.Mesh(new THREE.SphereGeometry(.1), new THREE.MeshBasicMaterial({
@@ -141,6 +146,11 @@ class App {
                     })
                 }
 
+
+                let clone = o.clone();
+                if (obj.add) this.scene.add(clone)
+                this.models[obj.name] = o
+
                 switch (obj.name) {
                     case "terrain_test":
                         let b = new CANNON.Body({
@@ -151,11 +161,15 @@ class App {
                         this.terrain = b;
                         this.physics.world.add(b);
                         break;
+                    case "skybox":
+                        let sky_tex = obj.obj[0].material.map;
+                        /* clone.material.map = null; */
+                        log(clone);
+
+                        this.skybox = clone
+                        break;
 
                 }
-
-                if (obj.add) this.scene.add(o.clone())
-                this.models[obj.name] = o
             })
         })
         log("App resources loaded.")
